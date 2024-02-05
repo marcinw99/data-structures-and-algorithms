@@ -2,30 +2,54 @@ package main
 
 import "fmt"
 
-// this code doesn't always work and is most likely more complicated than it should be
+// mine, works but too slow
 func findMaxLength(nums []int) int {
+	prefix := make([]int, len(nums))
+	prefix[0] = nums[0]
+
 	answer := 0
 
-	prefix := make([]int, len(nums))
+	// from 1 since no valid subarrays can be at 0
+	for i := 1; i < len(nums); i++ {
+		prefix[i] = nums[i] + prefix[i-1]
+		furthestIndex := (prefix[i] * 2) - i - 1
 
-	for i, num := range nums {
-		if i == 0 {
-			prefix[0] = num
-		} else {
-			prefix[i] = num + prefix[i-1]
+		for j := furthestIndex; j < i && i-j+1 > answer; j++ {
+			sum := prefix[i]
+			if j > 0 { // the whole array can also be valid - no need for prefix sum formula
+				sum -= prefix[j-1]
+			}
+			length := i - j + 1
+			if sum*2 == length {
+				answer = max(answer, length)
+			}
 		}
 	}
 
-	// find the longest subarray which sum is equal to half of its length
+	return answer
+}
 
-	for i := 0; i <= len(prefix)-1; i++ {
-		furthestPotentialStart := i - (prefix[i]*2 - 1)
-		if i > 0 && furthestPotentialStart >= 0 {
+// poor attempt to improve the above
+func findMaxLengthOptimised(nums []int) int {
+	prefix := make([]int, len(nums))
+	prefix[0] = nums[0]
+
+	for i := 1; i < len(nums); i++ {
+		prefix[i] = nums[i] + prefix[i-1]
+	}
+
+	answer := 0
+
+	for i := len(prefix) - 1; i >= 0; i-- {
+
+		furthestIndex := (prefix[i] * 2) - i - 1
+
+		for j := furthestIndex; j < i && i-j+1 > answer; j++ {
 			sum := prefix[i]
-			if furthestPotentialStart > 0 { // sometimes we take full array into account
-				sum -= prefix[furthestPotentialStart-1]
+			if j > 0 { // the whole array can also be valid - no need for prefix sum formula
+				sum -= prefix[j-1]
 			}
-			length := i - furthestPotentialStart + 1
+			length := i - j + 1
 			if sum*2 == length {
 				answer = max(answer, length)
 			}
@@ -36,13 +60,14 @@ func findMaxLength(nums []int) int {
 }
 
 func main() {
-	//fmt.Println(findMaxLength([]int{0, 1}))                   // 2
-	//fmt.Println(findMaxLength([]int{0, 1, 0}))                // 2
-	//fmt.Println(findMaxLength([]int{0, 1, 0, 1}))             // 4
-	//fmt.Println(findMaxLength([]int{0, 0, 1, 0}))             // 2
-	//fmt.Println(findMaxLength([]int{0, 0, 0, 1, 1, 1}))       // 6
-	//fmt.Println(findMaxLength([]int{1, 1, 1, 0, 0, 0}))       // 6
-	//fmt.Println(findMaxLength([]int{0, 0, 0, 0}))             // 0
-	//fmt.Println(findMaxLength([]int{0, 0, 1, 0, 0, 0, 1, 1})) // 6
-	fmt.Println(findMaxLength([]int{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1})) // 94
+	fmt.Println(findMaxLengthOptimised([]int{0, 1}))                   // 2
+	fmt.Println(findMaxLengthOptimised([]int{0, 1, 0}))                // 2
+	fmt.Println(findMaxLengthOptimised([]int{0, 1, 0, 1}))             // 4
+	fmt.Println(findMaxLengthOptimised([]int{0, 0, 1, 0}))             // 2
+	fmt.Println(findMaxLengthOptimised([]int{0, 0, 0, 1, 1, 1}))       // 6
+	fmt.Println(findMaxLengthOptimised([]int{1, 1, 1, 0, 0, 0}))       // 6
+	fmt.Println(findMaxLengthOptimised([]int{0, 0, 0, 0}))             // 0
+	fmt.Println(findMaxLengthOptimised([]int{0, 0, 1, 0, 0, 0, 1, 1})) // 6
+	testData := []int{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1}
+	fmt.Println(findMaxLengthOptimised(testData)) // 94 (from 6 to 100)
 }
