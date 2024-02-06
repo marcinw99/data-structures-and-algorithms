@@ -59,15 +59,42 @@ func findMaxLengthOptimised(nums []int) int {
 	return answer
 }
 
+// all below from LC
+func findMaxLengthLast(nums []int) int {
+	answer := 0
+	current := 0
+	indexesPerSum := map[int][]int{}
+
+	for i, num := range nums {
+		if num == 0 {
+			current -= 1
+		} else {
+			current += 1
+		}
+
+		if _, ok := indexesPerSum[current]; ok {
+			indexesPerSum[current] = append(indexesPerSum[current], i)
+		} else {
+			indexesPerSum[current] = []int{current}
+		}
+	}
+
+	fmt.Println(indexesPerSum)
+
+	return answer
+}
+
 func main() {
-	fmt.Println(findMaxLengthOptimised([]int{0, 1}))                   // 2
-	fmt.Println(findMaxLengthOptimised([]int{0, 1, 0}))                // 2
-	fmt.Println(findMaxLengthOptimised([]int{0, 1, 0, 1}))             // 4
-	fmt.Println(findMaxLengthOptimised([]int{0, 0, 1, 0}))             // 2
-	fmt.Println(findMaxLengthOptimised([]int{0, 0, 0, 1, 1, 1}))       // 6
-	fmt.Println(findMaxLengthOptimised([]int{1, 1, 1, 0, 0, 0}))       // 6
-	fmt.Println(findMaxLengthOptimised([]int{0, 0, 0, 0}))             // 0
-	fmt.Println(findMaxLengthOptimised([]int{0, 0, 1, 0, 0, 0, 1, 1})) // 6
-	testData := []int{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1}
-	fmt.Println(findMaxLengthOptimised(testData)) // 94 (from 6 to 100)
+	//fmt.Println(findMaxLengthLast([]int{0, 1}))                   // 2
+	//fmt.Println(findMaxLengthLast([]int{0, 1, 0}))                // 2
+	//fmt.Println(findMaxLengthLast([]int{0, 1, 0, 1}))       // 4
+	fmt.Println(findMaxLengthLast([]int{0, 0, 1, 0}))             // 2
+	fmt.Println(findMaxLengthLast([]int{0, 0, 0, 1, 1, 0, 0, 0})) // 4
+	//fmt.Println(findMaxLengthLast([]int{0, 0, 0, 1, 1, 1})) // 6
+	fmt.Println(findMaxLengthLast([]int{1, 1, 1, 0, 0, 0})) // 6
+	fmt.Println(findMaxLengthLast([]int{1, 1, 1, 1, 0, 0})) // 4
+	//fmt.Println(findMaxLengthLast([]int{0, 0, 0, 0}))             // 0
+	fmt.Println(findMaxLengthLast([]int{0, 0, 1, 0, 0, 0, 1, 1})) // 6
+	//testData := []int{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1}
+	//fmt.Println(findMaxLengthLast(testData)) // 94 (from 6 to 100)
 }
