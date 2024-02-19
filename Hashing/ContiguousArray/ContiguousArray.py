@@ -28,15 +28,31 @@ def findMaxLength(nums: List[int]) -> int:
     return answer
 
 
-print(findMaxLength([0, 1]))  # 2
-print(findMaxLength([0, 1, 0]))  # 2
-print(findMaxLength([0, 1, 0, 1]))  # 4
-print(findMaxLength([0, 0, 1, 0]))  # 2
-print(findMaxLength([0, 0, 0, 1, 1, 1]))  # 6
-print(findMaxLength([1, 1, 1, 0, 0, 0]))  # 6
-print(findMaxLength([0, 0, 0, 0]))  # 0
-print(findMaxLength([0, 0, 1, 0, 0, 0, 1, 1]))  # 6
-print(findMaxLength(
+def findMaxLength2(nums: List[int]) -> int:
+    accumulatorIndexes = {0: -1}
+    current = 0
+    answer = 0
+
+    for i in range(len(nums)):
+        current += 1 if nums[i] == 1 else -1
+        if current not in accumulatorIndexes:
+            accumulatorIndexes[current] = i
+        else:
+            answer = max(answer, i - accumulatorIndexes[current])
+        # also possible to have additional current == 0 case here to avoid initialising the dict with 0: -1
+
+    return answer
+
+
+print(findMaxLength2([0, 1]))  # 2
+print(findMaxLength2([0, 1, 0]))  # 2
+print(findMaxLength2([0, 1, 0, 1]))  # 4
+print(findMaxLength2([0, 0, 1, 0]))  # 2
+print(findMaxLength2([0, 0, 0, 1, 1, 1]))  # 6
+print(findMaxLength2([1, 1, 1, 0, 0, 0]))  # 6
+print(findMaxLength2([0, 0, 0, 0]))  # 0
+print(findMaxLength2([0, 0, 1, 0, 0, 0, 1, 1]))  # 6
+print(findMaxLength2(
     [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
      1,
      0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0,
