@@ -31,17 +31,37 @@ class Solution:
 
         return -1
 
+    def minMutationShorter(self, startGene: str, endGene: str, bank: List[str]) -> int:
+        queue = deque([(startGene, 0)])
+        visited = {startGene}
+        bank_set = set(bank)
+
+        while queue:
+            gene, count = queue.popleft()
+
+            if gene == endGene:
+                return count
+
+            for fragment in "ACGT":
+                for i in range(8):
+                    potential_gene = gene[:i] + fragment + gene[i + 1:]
+                    if potential_gene not in visited and potential_gene in bank_set:
+                        visited.add(potential_gene)
+                        queue.append((potential_gene, count + 1))
+
+        return -1
+
 
 def test1():
-    print(Solution().minMutation('AACCGGTT', 'AACCGGTA', ["AACCGGTA"]))  # 1
+    print(Solution().minMutationShorter('AACCGGTT', 'AACCGGTA', ["AACCGGTA"]))  # 1
 
 
 def test2():
-    print(Solution().minMutation('AACCGGTT', 'AAACGGTA', ["AACCGGTA", "AACCGCTA", "AAACGGTA"]))  # 2
+    print(Solution().minMutationShorter('AACCGGTT', 'AAACGGTA', ["AACCGGTA", "AACCGCTA", "AAACGGTA"]))  # 2
 
 
 def test3():
-    print(Solution().minMutation("AACCGGTT",
+    print(Solution().minMutationShorter("AACCGGTT",
                                  "AAACGGTA",
                                  ["AACCGATT", "AACCGATA", "AAACGATA", "AAACGGTA"]))  # 4
 
