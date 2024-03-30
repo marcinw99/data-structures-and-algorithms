@@ -34,4 +34,23 @@ class Solution:
         return mat
 
 
-print(Solution().updateMatrix([[0, 0, 0], [0, 1, 0], [1, 1, 1]]))
+# print(Solution().updateMatrix([[0, 0, 0], [0, 1, 0], [1, 1, 1]]))
+
+def improved_lcs(text1, text2):
+    lcs_length = 0
+    left = 0
+
+    while left < len(text2):
+        subsequence_pointer = left
+        for char in text1:
+            if char == text2[subsequence_pointer]:
+                subsequence_pointer += 1
+            if subsequence_pointer >= len(text2):
+                continue
+        lcs_length = max(lcs_length, subsequence_pointer)
+        left += 1
+
+    return lcs_length
+
+
+print(improved_lcs("abcde", "ace"))
