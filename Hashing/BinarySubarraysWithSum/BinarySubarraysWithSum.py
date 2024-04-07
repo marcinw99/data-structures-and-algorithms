@@ -28,7 +28,21 @@ class Solution:
         return answer
 
     def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
-        return 0
+        n = len(nums)
+        prefix_with_frequencies = {0: 1}
+
+        current = total_count = 0
+        for i in range(n):
+            current += nums[i]
+
+            if current - goal in prefix_with_frequencies:
+                left_bound_frequency = prefix_with_frequencies[current - goal]
+                total_count += left_bound_frequency
+
+            current_frequency = prefix_with_frequencies.get(current, 0) + 1
+            prefix_with_frequencies[current] = current_frequency
+
+        return total_count
 
 
 def test1():
