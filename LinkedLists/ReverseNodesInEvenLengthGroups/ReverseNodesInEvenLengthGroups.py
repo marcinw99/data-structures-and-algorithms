@@ -9,38 +9,34 @@ class ListNode:
 
 
 class Solution:
-    def reverseEvenLengthGroups(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        current_segment = 1
-
+    def reverseEvenLengthGroupsWrong(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        segment_length = 1
         dummy = head
-        prev = None
-        while dummy:
-            if current_segment % 2 == 0:
-                reversed_tail = dummy
 
+        last_natural_order_node = None
+        while head and head.next:
+            if segment_length % 2 == 0:
+                current_reversal_head = head
                 reversal_prev = None
-                current = dummy
                 i = 0
-                next_node = None
-                while current and i < current_segment:
+                while current_reversal_head and i < segment_length:
                     i += 1
-                    next_node = current.next
-                    current.next = reversal_prev
-                    reversal_prev = current
-                    current = next_node
-
-                prev.next = reversal_prev
-                reversed_tail.next = next_node
-                dummy = reversed_tail
+                    next_node = current_reversal_head.next
+                    current_reversal_head.next = reversal_prev
+                    reversal_prev = current_reversal_head
+                    current_reversal_head = next_node
+                last_natural_order_node.next = reversal_prev
+                head.next = current_reversal_head
+                head = head.next
             else:
-                for i in range(current_segment):
-                    prev = dummy
-                    dummy = dummy.next
-                    if not dummy:
-                        break
-            current_segment += 1
+                i = 0
+                while head and i < segment_length:
+                    i += 1
+                    last_natural_order_node = head
+                    head = head.next
+            segment_length += 1
 
-        return head
+        return dummy
 
 
 def create_nodes(values):
@@ -74,5 +70,10 @@ def test2():
     print_nodes(Solution().reverseEvenLengthGroups(create_nodes([1, 1, 0, 6])))  # [1,0,1,6]
 
 
+def test3():
+    print_nodes(Solution().reverseEvenLengthGroups(create_nodes([1, 1, 0, 6, 5])))  # [1,0,1,5,6]
+
+
 test1()
 test2()
+test3()
