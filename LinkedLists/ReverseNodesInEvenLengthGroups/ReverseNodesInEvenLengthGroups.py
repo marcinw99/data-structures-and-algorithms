@@ -38,6 +38,38 @@ class Solution:
 
         return dummy
 
+    def reverseEvenLengthGroups(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        connector = None
+        current = head
+        group_count = 1
+        count = 1
+
+        def reverse_nodes(before, n):
+            r_current = before.next
+            then = r_current.next
+            node_after_reversed_sequence = r_current
+
+            for _ in range(n - 1):
+                r_current.next = then.next
+                then.next = before.next
+                before.next = then
+                then = r_current.next
+
+            return node_after_reversed_sequence
+
+        while current:
+            if group_count == count or not current.next:
+                if count % 2 == 0:
+                    current = reverse_nodes(connector, count)
+                connector = current
+                group_count += 1
+                count = 0
+
+            count += 1
+            current = current.next
+
+        return head
+
 
 def create_nodes(values):
     if not values:
